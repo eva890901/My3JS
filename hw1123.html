@@ -27,7 +27,7 @@ import { OrbitControls } from 'https://unpkg.com/three/examples/jsm/controls/Orb
 
 var renderer, camera, scene; 
 var texture,leaves;
-
+var angle = 0;
 
 init(); 
 animate(); 
@@ -70,15 +70,15 @@ function init() {
 
 	loader.crossOrigin = '';
 	 //p.17
-	texture = loader.load('https://i.imgur.com/G9avLl0.png');
+	texture = loader.load('https://i.imgur.com/bsc4ZCb.png');
 	 let tex = new THREE.MeshBasicMaterial({
 			map: texture,
 			//transparent: true
 			alphaTest: 0.5,
 			side:THREE.DoubleSide
 		  });
-	  leaves = new THREE.Mesh(new THREE.PlaneGeometry(150, 150), tex);
-	  leaves.position.set(15, 30, -30);
+	  leaves = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), tex);
+	  leaves.position.set(15, 60, -50);
 	  scene.add(leaves);
 	var cubeMap = loadCubemap();
 	scene.background = cubeMap;
@@ -94,9 +94,9 @@ function loadCubemap() {
 
 
   var urls = [
-    "https://i.imgur.com/cmZBMbD.jpg", "https://i.imgur.com/LC7dgm9.jpg",
-    "https://i.imgur.com/N6tqvDV.jpg", "https://i.imgur.com/ZvH1Bnu.jpg",
-    "https://i.imgur.com/LC7dgm9.jpg", "https://i.imgur.com/xOFFTXk.jpg"
+    "https://eva890901.github.io/My3JS/posx.jpg", "https://eva890901.github.io/My3JS/negx.jpg",
+    "https://eva890901.github.io/My3JS/posy.jpg", "https://eva890901.github.io/My3JS/negy.jpg",
+    "https://eva890901.github.io/My3JS/posz.jpg", "https://eva890901.github.io/My3JS/negz.jpg"
   ];
   var loader = new THREE.CubeTextureLoader();
   loader.setCrossOrigin ('');
@@ -196,6 +196,8 @@ function onWindowResize() {
 
 
 function animate() {
+	leaves.rotation.y = angle
+	angle += 0.005;
 	renderer.render (scene, camera); 
 	requestAnimationFrame( animate ); 
 }
