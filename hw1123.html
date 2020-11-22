@@ -26,7 +26,7 @@ import * as THREE from 'https://unpkg.com/three/build/three.module.js';
 import { OrbitControls } from 'https://unpkg.com/three/examples/jsm/controls/OrbitControls.js';
 
 var renderer, camera, scene; 
-var texture,leaves;
+var texture,leaves,leaves1;
 var angle = 0;
 
 init(); 
@@ -60,7 +60,6 @@ function init() {
 
 	var texMat = new THREE.MeshBasicMaterial({
 		map: texture,
-		//transparent: true
 		alphaTest: 0.5,
 		side:THREE.DoubleSid
 	});
@@ -69,17 +68,25 @@ function init() {
 	scene.add(minion);
 
 	loader.crossOrigin = '';
-	 //p.17
+
 	texture = loader.load('https://i.imgur.com/bsc4ZCb.png');
-	 let tex = new THREE.MeshBasicMaterial({
-			map: texture,
-			//transparent: true
-			alphaTest: 0.5,
-			side:THREE.DoubleSide
-		  });
-	  leaves = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), tex);
-	  leaves.position.set(15, 60, -50);
-	  scene.add(leaves);
+	let tex = new THREE.MeshBasicMaterial({
+		map: texture,
+		alphaTest: 0.5,
+		side:THREE.DoubleSide
+	});
+	leaves = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), tex);
+	leaves.position.set(15, 60, -50);
+	scene.add(leaves);
+	texture = loader.load('https://i.imgur.com/bsc4ZCb.png');
+	let tex1 = new THREE.MeshBasicMaterial({
+		map: texture,
+		alphaTest: 0.5,
+		side:THREE.DoubleSide
+	});
+	leaves1 = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), tex1);
+	leaves1.position.set(60, 80, -50);
+	scene.add(leaves1);
 	var cubeMap = loadCubemap();
 	scene.background = cubeMap;
 
@@ -93,25 +100,25 @@ function init() {
 function loadCubemap() {
 
 
-  var urls = [
-    "https://eva890901.github.io/My3JS/posx.jpg", "https://eva890901.github.io/My3JS/negx.jpg",
-    "https://eva890901.github.io/My3JS/posy.jpg", "https://eva890901.github.io/My3JS/negy.jpg",
-    "https://eva890901.github.io/My3JS/posz.jpg", "https://eva890901.github.io/My3JS/negz.jpg"
-  ];
-  var loader = new THREE.CubeTextureLoader();
-  loader.setCrossOrigin ('');
-  var cubeMap = loader.load(urls);
-  cubeMap.format = THREE.RGBFormat;
-  return cubeMap;
+	var urls = [
+		"https://eva890901.github.io/My3JS/posx.jpg", "https://eva890901.github.io/My3JS/negx.jpg",
+		"https://eva890901.github.io/My3JS/posy.jpg", "https://eva890901.github.io/My3JS/negy.jpg",
+		"https://eva890901.github.io/My3JS/posz.jpg", "https://eva890901.github.io/My3JS/negz.jpg"
+	];
+	var loader = new THREE.CubeTextureLoader();
+	loader.setCrossOrigin ('');
+	var cubeMap = loader.load(urls);
+	cubeMap.format = THREE.RGBFormat;
+	return cubeMap;
   
 }
 
 function makeCola() {
 	let cola = new THREE.Group();
-  let loader = new THREE.TextureLoader();
-  let texture = loader.load ("https://i.imgur.com/1jjVbiU.png");
-  let material1;
-  const points = [];
+	let loader = new THREE.TextureLoader();
+	let texture = loader.load ("https://i.imgur.com/1jjVbiU.png");
+	let material1;
+	const points = [];
 	points.push (new THREE.Vector2 (20,0), new THREE.Vector2(23, 5), new THREE.Vector2(23, 65), new THREE.Vector2(20, 70));
 
 	const geometry = new THREE.LatheGeometry( points );
@@ -141,53 +148,7 @@ function makeCola() {
 	scene.add(cola);
 
 }
-/*
-function  cola(){
-	//body
-    let loader = new THREE.TextureLoader();
-	loader.crossOrigin = '';
-	texture = loader.load('https://i.imgur.com/kxUazwc.jpg');
-	
-	let material;
-	
-	var geometry = new THREE.CylinderBufferGeometry( 5,5,20,32,1,open);
-        material = new THREE.MeshBasicMaterial( {map: texture} );
-    var body = new THREE.Mesh( geometry, material );
-    body.position.set(0,10.5,0);
-	//can
-	var points = [];
-	for ( let i = 0; i < 10; i ++ ) {
-		points.push( new THREE.Vector2( Math.sin( i * 0.15 ) * 0.3 + 5, ( i - 5 ) * 0.2 ) );
-	}
-	var geometry = new THREE.LatheGeometry(points,15,0,6.3);
-        material = new THREE.MeshBasicMaterial( { color: 0Xc1c1c1 } );
-	var lathe = new THREE.Mesh( geometry, material );
-	var lathe2 = lathe.clone();
-	lathe2.rotation.z = Math.PI;
-	lathe.position.set(0,1.0,0);
-	lathe2.position.set(0,20,0);
-	//caps
-	
-	texture = loader.load('https://i.imgur.com/WrPEIzt.png');
-	var geometry = new THREE.CircleGeometry(5, 32 );
-	    material = new THREE.MeshBasicMaterial( {map: texture} );
-	var circle = new THREE.Mesh( geometry, material );
-	circle.rotation.x = Math.PI/2;
-	
-	var geometry2 = new THREE.CircleGeometry(5, 32 );
-	texture = loader.load('https://i.imgur.com/WylWJpX.png');
-	    material = new THREE.MeshBasicMaterial( {map: texture} );
-	var circle2 = new THREE.Mesh( geometry2, material );
-	circle2.rotation.x = Math.PI/2;
-	circle2.rotation.y = Math.PI;
-	//circle.position.set(5,0,5);
-	circle2.position.set(0,20.5,0);
 
-	var frame = new THREE.Object3D();
-	frame.add(body,lathe,lathe2,circle,circle2);
-	scene.add(frame);
-}
-*/
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
@@ -197,6 +158,8 @@ function onWindowResize() {
 
 function animate() {
 	leaves.rotation.y = angle
+	angle += 0.005;
+	leaves1.rotation.y = angle
 	angle += 0.005;
 	renderer.render (scene, camera); 
 	requestAnimationFrame( animate ); 
