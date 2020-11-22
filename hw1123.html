@@ -1,0 +1,206 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<style>
+	#heading{
+	 position:absolute;
+	 text-align:center;
+	 width:100vw;
+	}
+</style> 
+</head>
+<body>  
+
+
+<div id='heading'>
+ <h1 style ='color:red'>My Minion&&Cola</h1>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/107/three.min.js"></script>
+
+<script type ="module">
+javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='https://mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
+
+import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three/examples/jsm/controls/OrbitControls.js';
+
+var renderer, camera, scene; 
+var texture,leaves;
+
+
+init(); 
+animate(); 
+
+function init() { 
+
+	renderer = new THREE.WebGLRenderer ({antialias: true}); 
+	renderer.setSize (window.innerWidth,window.innerHeight); 
+	renderer.setClearColor (0x888888); 
+	document.body.appendChild (renderer.domElement); 
+
+	camera = new THREE.PerspectiveCamera (50, window.innerWidth/window.innerHeight, 1, 2000);
+	camera. position.z = 500;
+
+	var controls = new OrbitControls (camera, renderer.domElement);
+	var axes = new THREE.AxesHelper(30);
+	scene = new THREE.Scene(); 
+	var grid = new THREE.GridHelper (200, 10, 'red', 'gray');
+	scene. add (grid);
+	scene. add (axes);
+	var floor = new THREE.Mesh (new THREE.PlaneGeometry(200,200), new THREE.MeshBasicMaterial());
+	floor.rotation.x = -Math.PI/2;
+	scene.add (floor);
+
+    makeCola();
+    let loader = new THREE.TextureLoader();
+	loader.crossOrigin = '';
+	 
+	texture = loader.load('https://i.imgur.com/b2JwGNS.png');
+
+	var texMat = new THREE.MeshBasicMaterial({
+		map: texture,
+		//transparent: true
+		alphaTest: 0.5,
+		side:THREE.DoubleSid
+	});
+	var minion = new THREE.Mesh(new THREE.PlaneGeometry(40,40), texMat);
+	minion.position.set(50,17,0)
+	scene.add(minion);
+
+	loader.crossOrigin = '';
+	 //p.17
+	texture = loader.load('https://i.imgur.com/G9avLl0.png');
+	 let tex = new THREE.MeshBasicMaterial({
+			map: texture,
+			//transparent: true
+			alphaTest: 0.5,
+			side:THREE.DoubleSide
+		  });
+	  leaves = new THREE.Mesh(new THREE.PlaneGeometry(150, 150), tex);
+	  leaves.position.set(15, 30, -30);
+	  scene.add(leaves);
+	var cubeMap = loadCubemap();
+	scene.background = cubeMap;
+
+	var light = new THREE.PointLight(0xffffff, 1, 100);
+	light.position.set(10, 10, 10);
+	scene.add(light);
+
+
+	window.addEventListener('resize', onWindowResize, false);
+	} 
+function loadCubemap() {
+
+
+  var urls = [
+    "https://i.imgur.com/cmZBMbD.jpg", "https://i.imgur.com/LC7dgm9.jpg",
+    "https://i.imgur.com/N6tqvDV.jpg", "https://i.imgur.com/ZvH1Bnu.jpg",
+    "https://i.imgur.com/LC7dgm9.jpg", "https://i.imgur.com/xOFFTXk.jpg"
+  ];
+  var loader = new THREE.CubeTextureLoader();
+  loader.setCrossOrigin ('');
+  var cubeMap = loader.load(urls);
+  cubeMap.format = THREE.RGBFormat;
+  return cubeMap;
+  
+}
+
+function makeCola() {
+	let cola = new THREE.Group();
+  let loader = new THREE.TextureLoader();
+  let texture = loader.load ("https://i.imgur.com/1jjVbiU.png");
+  let material1;
+  const points = [];
+	points.push (new THREE.Vector2 (20,0), new THREE.Vector2(23, 5), new THREE.Vector2(23, 65), new THREE.Vector2(20, 70));
+
+	const geometry = new THREE.LatheGeometry( points );
+	const material = new THREE.MeshBasicMaterial( { map: texture } );
+	const lathe = new THREE.Mesh( geometry, material );
+	let cap = new THREE.Mesh (new THREE.CircleGeometry (30, 20), new THREE.MeshNormalMaterial({side: THREE.DoubleSide}));
+	
+	texture = loader.load('https://i.imgur.com/WrPEIzt.png');
+	var geometry1 = new THREE.CircleGeometry(20, 32 );
+	    material1 = new THREE.MeshBasicMaterial( {map: texture} );
+	var circle = new THREE.Mesh( geometry1, material1 );
+	circle.rotation.x = Math.PI/2;
+	
+	var geometry2 = new THREE.CircleGeometry(20, 32 );
+	texture = loader.load('https://i.imgur.com/WylWJpX.png');
+	    material1 = new THREE.MeshBasicMaterial( {map: texture} );
+	var circle2 = new THREE.Mesh( geometry2, material1 );
+	circle2.rotation.x = Math.PI/2;
+	circle2.rotation.y = Math.PI;
+	//circle.position.set(5,0,5);
+	circle2.position.set(0,70,0);
+	
+	cola.add (circle,circle2);
+	cap.position.set (0,90,0);
+	cap.rotation.x = -Math.PI/2;
+	cola.add( lathe );
+	scene.add(cola);
+
+}
+/*
+function  cola(){
+	//body
+    let loader = new THREE.TextureLoader();
+	loader.crossOrigin = '';
+	texture = loader.load('https://i.imgur.com/kxUazwc.jpg');
+	
+	let material;
+	
+	var geometry = new THREE.CylinderBufferGeometry( 5,5,20,32,1,open);
+        material = new THREE.MeshBasicMaterial( {map: texture} );
+    var body = new THREE.Mesh( geometry, material );
+    body.position.set(0,10.5,0);
+	//can
+	var points = [];
+	for ( let i = 0; i < 10; i ++ ) {
+		points.push( new THREE.Vector2( Math.sin( i * 0.15 ) * 0.3 + 5, ( i - 5 ) * 0.2 ) );
+	}
+	var geometry = new THREE.LatheGeometry(points,15,0,6.3);
+        material = new THREE.MeshBasicMaterial( { color: 0Xc1c1c1 } );
+	var lathe = new THREE.Mesh( geometry, material );
+	var lathe2 = lathe.clone();
+	lathe2.rotation.z = Math.PI;
+	lathe.position.set(0,1.0,0);
+	lathe2.position.set(0,20,0);
+	//caps
+	
+	texture = loader.load('https://i.imgur.com/WrPEIzt.png');
+	var geometry = new THREE.CircleGeometry(5, 32 );
+	    material = new THREE.MeshBasicMaterial( {map: texture} );
+	var circle = new THREE.Mesh( geometry, material );
+	circle.rotation.x = Math.PI/2;
+	
+	var geometry2 = new THREE.CircleGeometry(5, 32 );
+	texture = loader.load('https://i.imgur.com/WylWJpX.png');
+	    material = new THREE.MeshBasicMaterial( {map: texture} );
+	var circle2 = new THREE.Mesh( geometry2, material );
+	circle2.rotation.x = Math.PI/2;
+	circle2.rotation.y = Math.PI;
+	//circle.position.set(5,0,5);
+	circle2.position.set(0,20.5,0);
+
+	var frame = new THREE.Object3D();
+	frame.add(body,lathe,lathe2,circle,circle2);
+	scene.add(frame);
+}
+*/
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+
+function animate() {
+	renderer.render (scene, camera); 
+	requestAnimationFrame( animate ); 
+}
+
+
+</script> 
+
+</body>
