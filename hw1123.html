@@ -124,15 +124,15 @@ function makeCola() {
 	const geometry = new THREE.LatheGeometry( points );
 	const material = new THREE.MeshBasicMaterial( { map: texture } );
 	const lathe = new THREE.Mesh( geometry, material );
-	let cap = new THREE.Mesh (new THREE.CircleGeometry (30, 20), new THREE.MeshNormalMaterial({side: THREE.DoubleSide}));
+
 	
 	texture = loader.load('https://i.imgur.com/WrPEIzt.png');
-	var geometry1 = new THREE.CircleGeometry(20, 32 );
+	var geometry1 = new THREE.CircleGeometry(20, 64 );
 	    material1 = new THREE.MeshBasicMaterial( {map: texture} );
 	var circle = new THREE.Mesh( geometry1, material1 );
 	circle.rotation.x = Math.PI/2;
 	
-	var geometry2 = new THREE.CircleGeometry(20, 32 );
+	var geometry2 = new THREE.CircleGeometry(20, 64 );
 	texture = loader.load('https://i.imgur.com/WylWJpX.png');
 	    material1 = new THREE.MeshBasicMaterial( {map: texture} );
 	var circle2 = new THREE.Mesh( geometry2, material1 );
@@ -141,8 +141,6 @@ function makeCola() {
 	circle2.position.set(0,70,0);
 	
 	cola.add (circle,circle2);
-	cap.position.set (0,90,0);
-	cap.rotation.x = -Math.PI/2;
 	cola.add( lathe );
 	scene.add(cola);
 

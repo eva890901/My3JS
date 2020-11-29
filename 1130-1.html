@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#info {
+  position: absolute;
+  top: 1%;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #ffee12;
+}
+
+body {
+  overflow: hidden;
+}
+
+</style>
+</head>
+<body> 
+<div id="info">Forest
+  <br> 
+</div>
+
+
+<script type ="module">
+javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='https://mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
+
+import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three/examples/jsm/controls/OrbitControls.js';
+import { MTLLoader } from 'https://unpkg.com/three/examples/jsm/loaders/MTLLoader.js';
+import { OBJLoader } from 'https://unpkg.com/three/examples/jsm/loaders/OBJLoader.js';
+// my script
+var renderer, scene, camera,trees,controls;
+
+init();
+animate();
+
+function init() {
+
+	scene = new THREE.Scene();
+	camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 3000);
+	camera.position.z = 200;
+
+	renderer = new THREE.WebGLRenderer();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.setClearColor(0x888888);
+
+	document.body.appendChild(renderer.domElement);
+
+	controls = new OrbitControls(camera, renderer.domElement);
+	//controls.autoRotate = true;
+	var light = new THREE.PointLight( 0xffffff, 1, 1000 );
+	scene.add( light );
+	/////////////////////////////////////////////////////////////////////
+	var gridXZ = new THREE.GridHelper (400,40,'red','white')
+	scene.add (gridXZ)
+
+	let loader = new THREE.TextureLoader();
+	loader.crossOrigin = '';
+	var texture = loader.load('https://i.imgur.com/jwdUgBA.png');
+
+	var texMat = new THREE.MeshBasicMaterial({
+		map: texture,
+		alphaTest: 0.5
+	});
+
+	var tree = new THREE.Mesh(new THREE.PlaneGeometry(40, 80), texMat);
+	trees = []
+	for (let i = 0; i < 15; i++) {
+		let tt = tree.clone();
+		tt.position.set ((-1+Math.random()*2)*180, 40, (-1+Math.random()*2)*180)
+		trees.push (tt)
+		scene.add (tt)
+	}
+}
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+}
+function animate() {
+ 
+ 	controls.update();
+  
+	trees.forEach (function(t) {t.lookAt (camera.position)})
+  
+	requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+
+}
+
+
+
+</script>
+
+</body>
+</html>
