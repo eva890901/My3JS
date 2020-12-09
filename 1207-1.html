@@ -140,7 +140,7 @@ function countDown() {
 		var texture = mesh.material.map;
 		texture.offset.x -= 0.2;
 	}
-	counter--;
+	--counter;
 	if (counter === 0)
 		clockOn = false;
 }
